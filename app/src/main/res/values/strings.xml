@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Dictionary</string>
+
+    <string name="error_message_http_exception">Something went wrong in the server!</string>
+    <string name="error_message_io_exception">Couldn\'t reach the server. Verify your internet connection.</string>
+</resources>

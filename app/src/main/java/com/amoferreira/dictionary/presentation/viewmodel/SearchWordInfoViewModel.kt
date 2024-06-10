@@ -1,9 +1,11 @@
 package com.amoferreira.dictionary.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amoferreira.dictionary.domain.usecase.GetSavedWordsUseCase
 import com.amoferreira.dictionary.domain.usecase.GetWordInfoUseCase
 import com.amoferreira.dictionary.presentation.state.WordInfoState
 import com.amoferreira.dictionary.utils.Resource
@@ -19,8 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchWordInfoViewModel @Inject constructor(
-    private val getWordInfoUseCase: GetWordInfoUseCase
+    private val getWordInfoUseCase: GetWordInfoUseCase,
+    private val getSavedWordsUseCase: GetSavedWordsUseCase
 ) : ViewModel() {
+    val TAG = javaClass.simpleName
 
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
@@ -40,6 +44,7 @@ class SearchWordInfoViewModel @Inject constructor(
             delay(SEARCH_DELAY)
             getWordInfoUseCase.getWordInfo(query)
                 .onEach { result ->
+                    Log.i(TAG, "Received word info: $result")
                     when(result) {
                         is Resource.Success -> {
                             _state.value = state.value.copy(
@@ -64,6 +69,12 @@ class SearchWordInfoViewModel @Inject constructor(
                         }
                     }
                 }.launchIn(this)
+        }
+    }
+
+    fun onAddButtonClicked() {
+        viewModelScope.launch {
+            getSavedWordsUseCase.addWord(state.value.wordInfoItems)
         }
     }
 

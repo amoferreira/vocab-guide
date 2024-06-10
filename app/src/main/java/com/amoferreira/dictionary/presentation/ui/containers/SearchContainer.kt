@@ -13,5 +13,6 @@ fun SearchContainer() {
         eventFlow = viewModel.eventFlow,
         searchQuery = viewModel.searchQuery,
         onSearchAction = viewModel::onSearch,
+        onAddButtonClick = viewModel::onAddButtonClicked
     )
 }

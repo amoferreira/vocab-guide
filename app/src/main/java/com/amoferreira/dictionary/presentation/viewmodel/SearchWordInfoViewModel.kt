@@ -24,7 +24,7 @@ class SearchWordInfoViewModel @Inject constructor(
     private val getWordInfoUseCase: GetWordInfoUseCase,
     private val getSavedWordsUseCase: GetSavedWordsUseCase
 ) : ViewModel() {
-    val TAG = javaClass.simpleName
+    private val tag = javaClass.simpleName
 
     private val _searchQuery = mutableStateOf("")
     val searchQuery: State<String> = _searchQuery
@@ -44,7 +44,7 @@ class SearchWordInfoViewModel @Inject constructor(
             delay(SEARCH_DELAY)
             getWordInfoUseCase.getWordInfo(query)
                 .onEach { result ->
-                    Log.i(TAG, "Received word info: $result")
+                    Log.i(tag, "Received word info: $result")
                     when(result) {
                         is Resource.Success -> {
                             _state.value = state.value.copy(
@@ -74,7 +74,7 @@ class SearchWordInfoViewModel @Inject constructor(
 
     fun onAddButtonClicked() {
         viewModelScope.launch {
-            getSavedWordsUseCase.addWord(state.value.wordInfoItems)
+            getSavedWordsUseCase.addWord(state.value.wordInfoItems[0].word)
         }
     }
 

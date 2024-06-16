@@ -11,6 +11,7 @@ fun SavedWordsContainer() {
     val viewModel: SavedWordsViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     SavedWordsScreen(
-        uiState = uiState.value
+        uiState = uiState.value,
+        onDeleteOptionClick = viewModel::deleteWord
     )
 }

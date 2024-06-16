@@ -5,8 +5,8 @@ import androidx.room.Room
 import com.amoferreira.dictionary.data.repository.SavedWordsRepositoryImpl
 import com.amoferreira.dictionary.data.source.local.SavedWordsDatabase
 import com.amoferreira.dictionary.domain.repository.SavedWordsRepository
-import com.amoferreira.dictionary.domain.usecase.GetSavedWordsUseCase
-import com.amoferreira.dictionary.domain.usecase.GetSavedWordsUseCaseImpl
+import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCase
+import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +18,8 @@ import javax.inject.Singleton
 object SavedWordsModule {
     @Provides
     @Singleton
-    fun provideGetSavedWordsUseCase(repository: SavedWordsRepository): GetSavedWordsUseCase {
-        return GetSavedWordsUseCaseImpl(repository)
+    fun provideGetSavedWordsUseCase(repository: SavedWordsRepository): SavedWordsUseCase {
+        return SavedWordsUseCaseImpl(repository)
     }
 
     @Provides

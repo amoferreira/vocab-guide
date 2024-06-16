@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.amoferreira.dictionary.data.source.local.entity.SavedWordEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedWordsDao {
@@ -16,5 +17,5 @@ interface SavedWordsDao {
     suspend fun deleteWord(word: String)
 
     @Query("SELECT word FROM savedwordentity")
-    suspend fun getAllWords(): List<String>
+    fun getAllWords(): Flow<List<String>>
 }

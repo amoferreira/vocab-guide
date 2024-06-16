@@ -73,6 +73,7 @@ dependencies {
     //Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.50")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     kapt("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -107,6 +108,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.2")
+
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

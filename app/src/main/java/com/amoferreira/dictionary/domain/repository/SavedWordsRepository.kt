@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SavedWordsRepository {
 
-    fun getSavedWords(): Flow<Resource<List<String>>>
+    val savedWords: Flow<Resource<List<String>>>
     suspend fun addWord(word: String)
+    suspend fun removeWord(word:String)
 }

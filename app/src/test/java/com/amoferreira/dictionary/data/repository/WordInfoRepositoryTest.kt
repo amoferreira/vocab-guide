@@ -10,7 +10,7 @@ import io.mockk.mockk
 import org.junit.After
 import org.junit.Before
 
-class WordInfoRepositoryImplTest {
+class WordInfoRepositoryTest {
     private lateinit var contextMock: Context
     private lateinit var apiMock: DictionaryApi
     private lateinit var daoMock: WordInfoDao

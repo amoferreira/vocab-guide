@@ -5,7 +5,7 @@ import com.amoferreira.dictionary.domain.model.Meaning
 import com.amoferreira.dictionary.domain.model.WordInfo
 import io.github.serpro69.kfaker.Faker
 
-val faker = Faker()
+private val faker by lazy { Faker() }
 
 fun createDefinition(
     antonyms: List<String> = listOf(faker.random.randomString()),

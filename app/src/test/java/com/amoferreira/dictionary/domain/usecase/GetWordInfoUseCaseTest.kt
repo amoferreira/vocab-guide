@@ -2,6 +2,7 @@ package com.amoferreira.dictionary.domain.usecase
 
 import com.amoferreira.dictionary.domain.repository.WordInfoRepository
 import com.amoferreira.dictionary.testUtils.createWordInfo
+import com.amoferreira.dictionary.testUtils.mockLog
 import com.amoferreira.dictionary.utils.Resource
 import io.github.serpro69.kfaker.Faker
 import io.mockk.clearAllMocks
@@ -23,6 +24,7 @@ class GetWordInfoUseCaseTest {
 
     @Before
     fun setup() {
+        mockLog()
         repositoryMock = mockk()
         sut = GetWordInfoUseCaseImpl(repositoryMock)
     }

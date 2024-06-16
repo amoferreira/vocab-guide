@@ -5,8 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amoferreira.dictionary.domain.usecase.GetSavedWordsUseCase
 import com.amoferreira.dictionary.domain.usecase.GetWordInfoUseCase
+import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCase
 import com.amoferreira.dictionary.presentation.state.WordInfoState
 import com.amoferreira.dictionary.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchWordInfoViewModel @Inject constructor(
     private val getWordInfoUseCase: GetWordInfoUseCase,
-    private val getSavedWordsUseCase: GetSavedWordsUseCase
+    private val savedWordsUseCase: SavedWordsUseCase
 ) : ViewModel() {
     private val tag = javaClass.simpleName
 
@@ -74,7 +74,7 @@ class SearchWordInfoViewModel @Inject constructor(
 
     fun onAddButtonClicked() {
         viewModelScope.launch {
-            getSavedWordsUseCase.addWord(state.value.wordInfoItems[0].word)
+            savedWordsUseCase.addWord(state.value.wordInfoItems[0].word)
         }
     }
 

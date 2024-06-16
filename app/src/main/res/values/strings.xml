@@ -3,4 +3,11 @@
 
     <string name="error_message_http_exception">Something went wrong in the server!</string>
     <string name="error_message_io_exception">Couldn\'t reach the server. Verify your internet connection.</string>
+
+    <!-- Saved Words -->
+    <string name="saved_words_title">Your Saved Words</string>
+    <string name="saved_words_empty_list_message">Add words to your list to see them here!</string>
+    <string name="saved_words_get_error_message">Sorry! Something went wrong while trying to get your saved words. Try again later.</string>
+    <string name="delete_word_toast">%1$s was deleted from your saved words.</string>
+    <string name="delete_word_option">Delete word</string>
 </resources>

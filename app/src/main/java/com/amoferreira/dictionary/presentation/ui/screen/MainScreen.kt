@@ -45,7 +45,7 @@ fun MainScreen(
         snackbarHost = { SnackbarHost(hostState = scaffoldState) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            Navigation(navController = navController)
+            Navigation(navController = navController, scaffoldSnackbarHostState = scaffoldState)
         }
     }
 }

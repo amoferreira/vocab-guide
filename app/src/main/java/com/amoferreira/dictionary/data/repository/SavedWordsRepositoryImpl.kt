@@ -1,15 +1,18 @@
 package com.amoferreira.dictionary.data.repository
 
 import android.util.Log
+import com.amoferreira.dictionary.R
 import com.amoferreira.dictionary.data.source.local.dao.SavedWordsDao
 import com.amoferreira.dictionary.data.source.local.entity.SavedWordEntity
 import com.amoferreira.dictionary.domain.repository.SavedWordsRepository
 import com.amoferreira.dictionary.utils.Resource
+import com.amoferreira.dictionary.utils.ResourceProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class SavedWordsRepositoryImpl(
-    private val dao: SavedWordsDao
+    private val dao: SavedWordsDao,
+    private val resourceProvider: ResourceProvider
 ) : SavedWordsRepository {
     private val tag = javaClass.simpleName
 
@@ -29,7 +32,7 @@ class SavedWordsRepositoryImpl(
             Log.e(tag, "Couldn't get saved words from DB.", e)
             emit(
                 Resource.Error(
-                    message = "Something went wrong"
+                    message = resourceProvider.getString(R.string.error_message_generic_exception)
                 )
             )
         }

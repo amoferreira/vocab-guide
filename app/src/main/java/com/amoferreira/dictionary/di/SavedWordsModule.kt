@@ -7,6 +7,7 @@ import com.amoferreira.dictionary.data.source.local.SavedWordsDatabase
 import com.amoferreira.dictionary.domain.repository.SavedWordsRepository
 import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCase
 import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCaseImpl
+import com.amoferreira.dictionary.utils.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +26,10 @@ object SavedWordsModule {
     @Provides
     @Singleton
     fun provideSavedWordsRepository(
-        db: SavedWordsDatabase
+        db: SavedWordsDatabase,
+        resourceProvider: ResourceProvider
     ): SavedWordsRepository {
-        return SavedWordsRepositoryImpl(db.dao)
+        return SavedWordsRepositoryImpl(db.dao, resourceProvider)
     }
 
     @Provides

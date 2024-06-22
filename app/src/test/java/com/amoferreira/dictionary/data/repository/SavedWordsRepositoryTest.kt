@@ -5,10 +5,12 @@ import com.amoferreira.dictionary.data.source.local.entity.SavedWordEntity
 import com.amoferreira.dictionary.domain.repository.SavedWordsRepository
 import com.amoferreira.dictionary.testUtils.mockLog
 import com.amoferreira.dictionary.utils.Resource
+import com.amoferreira.dictionary.utils.ResourceProvider
 import io.github.serpro69.kfaker.Faker
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.first
@@ -22,6 +24,7 @@ import org.junit.Test
 
 class SavedWordsRepositoryTest {
     private lateinit var daoMock: SavedWordsDao
+    private lateinit var resourceProviderMock: ResourceProvider
     private lateinit var sut: SavedWordsRepository
 
     private val faker by lazy { Faker()  }
@@ -30,7 +33,8 @@ class SavedWordsRepositoryTest {
     fun setup() {
         mockLog()
         daoMock = mockk(relaxed = true)
-        sut = SavedWordsRepositoryImpl(daoMock)
+        resourceProviderMock = mockk(relaxed = true)
+        sut = SavedWordsRepositoryImpl(daoMock, resourceProviderMock)
     }
 
     @After
@@ -64,11 +68,13 @@ class SavedWordsRepositoryTest {
     fun `when error occur while getting words then should emit error with message`() = runTest {
         //Assert
         coEvery { daoMock.getAllWords() } throws Exception()
+        val expectedMessage = faker.random.randomString()
+        every { resourceProviderMock.getString(any()) } returns expectedMessage
         //Act
         val result = sut.savedWords.last()
         //Assert
         assert(result is Resource.Error)
-        assertEquals("Something went wrong", result.message)
+        assertEquals(expectedMessage, result.message)
     }
 
     @Test

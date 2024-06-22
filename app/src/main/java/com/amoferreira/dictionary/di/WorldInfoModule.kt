@@ -11,6 +11,7 @@ import com.amoferreira.dictionary.data.utils.GsonParser
 import com.amoferreira.dictionary.domain.repository.WordInfoRepository
 import com.amoferreira.dictionary.domain.usecase.GetWordInfoUseCase
 import com.amoferreira.dictionary.domain.usecase.GetWordInfoUseCaseImpl
+import com.amoferreira.dictionary.utils.ResourceProvider
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -34,11 +35,11 @@ object WorldInfoModule {
     @Provides
     @Singleton
     fun provideWordInfoRepository(
-        @ApplicationContext appContext: Context,
         api: DictionaryApi,
-        db: WordInfoDatabase
+        db: WordInfoDatabase,
+        resourceProvider: ResourceProvider
     ): WordInfoRepository {
-        return WordInfoRepositoryImpl(appContext, api, db.dao)
+        return WordInfoRepositoryImpl(api, db.dao, resourceProvider)
     }
 
     @Provides

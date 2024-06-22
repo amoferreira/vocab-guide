@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amoferreira.dictionary.domain.usecase.GetWordInfoUseCase
 import com.amoferreira.dictionary.domain.usecase.SavedWordsUseCase
+import com.amoferreira.dictionary.presentation.event.UIEvent
 import com.amoferreira.dictionary.presentation.state.WordInfoState
 import com.amoferreira.dictionary.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,7 +58,8 @@ class SearchWordInfoViewModel @Inject constructor(
                                 wordInfoItems = result.data ?: emptyList(),
                                 isLoading = false
                             )
-                            _eventFlow.emit(UIEvent.ShowSnackbar(
+                            _eventFlow.emit(
+                                UIEvent.ShowSnackbar(
                                 result.message ?: "Unknown error"
                             ))
                         }
@@ -76,10 +78,6 @@ class SearchWordInfoViewModel @Inject constructor(
         viewModelScope.launch {
             savedWordsUseCase.addWord(state.value.wordInfoItems[0].word)
         }
-    }
-
-    sealed class UIEvent {
-        data class ShowSnackbar(val message: String): UIEvent()
     }
 
     companion object {

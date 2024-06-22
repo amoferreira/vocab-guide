@@ -18,21 +18,21 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.amoferreira.dictionary.presentation.event.UIEvent
 import com.amoferreira.dictionary.presentation.state.WordInfoState
 import com.amoferreira.dictionary.presentation.ui.molecules.WordInfoItem
-import com.amoferreira.dictionary.presentation.viewmodel.SearchWordInfoViewModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -40,20 +40,33 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SearchScreen(
     uiState: State<WordInfoState>,
-    eventFlow: SharedFlow<SearchWordInfoViewModel.UIEvent>,
+    eventFlow: SharedFlow<UIEvent>,
+    scaffoldSnackbarHostState: SnackbarHostState,
     searchQuery: State<String>,
     onSearchAction: (String) -> Unit,
     onAddButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scaffoldState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = true) {
         eventFlow.collectLatest { event ->
             when (event) {
-                is SearchWordInfoViewModel.UIEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.message)
+                is UIEvent.ShowSnackbar -> {
+                    val result = scaffoldSnackbarHostState
+                        .showSnackbar(
+                            message = event.message,
+                            actionLabel = event.actionLabel,
+                        )
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            event.action
+                        }
+                        SnackbarResult.Dismissed -> {
+                            event.dismissed
+                        }
+                    }
+
                 }
             }
         }

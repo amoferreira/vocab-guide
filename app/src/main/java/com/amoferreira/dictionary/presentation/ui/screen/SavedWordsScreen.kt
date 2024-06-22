@@ -1,6 +1,5 @@
 package com.amoferreira.dictionary.presentation.ui.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,8 +17,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,13 +35,18 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.amoferreira.dictionary.R
+import com.amoferreira.dictionary.presentation.event.UIEvent
 import com.amoferreira.dictionary.presentation.state.SavedWordsState
 import com.amoferreira.dictionary.presentation.ui.molecules.SavedWordsItem
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SavedWordsScreen(
     uiState: SavedWordsState,
+    eventFlow: SharedFlow<UIEvent>,
+    scaffoldSnackbarHostState: SnackbarHostState,
     onDeleteOptionClick: (String) -> Unit
 ) {
     val wordsSize = uiState.savedWords?.size
@@ -47,6 +55,32 @@ fun SavedWordsScreen(
     }
     val haptics = LocalHapticFeedback.current
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> {
+                    val result = scaffoldSnackbarHostState
+                        .showSnackbar(
+                            message = event.message,
+                            actionLabel = event.actionLabel,
+                            duration = SnackbarDuration.Short
+                        )
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            event.action?.invoke()
+                        }
+
+                        SnackbarResult.Dismissed -> {
+                            event.dismissed?.invoke()
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +118,6 @@ fun SavedWordsScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
         contextMenuWord?.let {
-            val toastMessage = stringResource(id = R.string.delete_word_toast, it)
             ModalBottomSheet(
                 onDismissRequest = { contextMenuWord = null }
             ) {
@@ -93,11 +126,6 @@ fun SavedWordsScreen(
                     trailingContent = { Icon(Icons.Default.Delete, "Delete icon") },
                     modifier = Modifier.clickable {
                         onDeleteOptionClick(it)
-                        Toast.makeText(
-                            context,
-                            toastMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
                         contextMenuWord = null
                     }
                 )
